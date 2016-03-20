@@ -157,6 +157,7 @@ Movie.urls.df$movieId<-gsub("(&searchType)+[[:print:]]+$", "", Movie.urls.df$mov
 movie.sales_open.review.all<-merge(movie.sales_open.review, Movie.urls.df, c('movieId'),all.x=T)
 movie.sales_open.review.all<-subset(movie.sales_open.review.all, numberofstar>0)
 
+# 140자 영화평 text 데이터 클리닝 작업
 movie.sales_open.review.all$text.clean<- gsub("\t", " ", movie.sales_open.review.all$text)
 movie.sales_open.review.all$text.clean<- gsub("\n", " ", movie.sales_open.review.all$text.clean)
 movie.sales_open.review.all$text.clean<- gsub("\r", " ", movie.sales_open.review.all$text.clean)
