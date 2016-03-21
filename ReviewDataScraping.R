@@ -2,7 +2,6 @@ library(rvest)
 library(stringi)
 library(reshape2)
 library(dplyr)
-library(ggplot2)
 
 #영진위의 매출 데이터를 기준으로 리뷰 데이터를 수집
 #인코딩 이슈가 있는 경우 아래 함수를 사용
