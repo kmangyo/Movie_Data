@@ -36,7 +36,7 @@ MovieURL.melt<-melt(MovieURL)
 MovieURL.melt<-merge(MovieURL.melt, movie.name.number, c('num'),all.x=T)
 MovieTitles.melt<-merge(MovieTitles.melt, movie.name.number, c('num'),all.x=T)
 
-#개별 영화 URL에서 다음내에서의 해당 영화 검색결과 찾기
+#개별 영화 URL에서 다음내에서의 해당 영화의 Id찾기
 MovieURL.melt$movieId<-gsub("[[:print:]]+(movieId=)", "", MovieURL.melt$value)
 MovieURL.melt.id<-MovieURL.melt[complete.cases(MovieURL.melt[,4]),]
 
