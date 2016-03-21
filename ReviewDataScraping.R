@@ -161,3 +161,4 @@ movie.sales_open.review.all$text.clean<- gsub("\t", " ", movie.sales_open.review
 movie.sales_open.review.all$text.clean<- gsub("\n", " ", movie.sales_open.review.all$text.clean)
 movie.sales_open.review.all$text.clean<- gsub("\r", " ", movie.sales_open.review.all$text.clean)
 movie.sales_open.review.all$text.clean<- gsub("\\s+", " ", movie.sales_open.review.all$text.clean)
+movie.sales_open.review.all$text.clean<-gsub("[[:punct:]]", " ", movie.sales_open.review.all$text.clean)
