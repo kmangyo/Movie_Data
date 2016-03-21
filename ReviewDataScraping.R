@@ -37,19 +37,19 @@ MovieURL.melt<-melt(MovieURL)
 MovieURL.melt<-merge(MovieURL.melt, movie.name.number, c('num'),all.x=T)
 MovieTitles.melt<-merge(MovieTitles.melt, movie.name.number, c('num'),all.x=T)
 
-#개별 영화 URL에서 다음내에서의 해당 영화 Id 찾기
+#개별 영화 URL에서 다음내에서의 해당 영화 검색결과 찾기
 MovieURL.melt$movieId<-gsub("[[:print:]]+(movieId=)", "", MovieURL.melt$value)
 MovieURL.melt.id<-MovieURL.melt[complete.cases(MovieURL.melt[,4]),]
 
-#영화 Id를 사용하여 해당 영화의 개봉일자, 평점, 평점을 준 사람 수를 분류
-#비효율적인 방법이지만, 좋은 아이디어가 떠오르지는 복잡하게 작업을 진행함
-
+#영화 검색 결과를 사용하여 해당 영화의 개봉일자, 평점, 평점을 준 사람 수를 분류
+#영화명의 검색결과 중 영진위 데이터와 영화명, 개봉일자가 같은 영화를 찾음
 movieID.URL<-paste0("http://movie.daum.net/moviedetail/moviedetailNetizenPoint.do?movieId=",MovieURL.melt.id$movieId,"&t__nil_main_NetizenPoint=more")
 
 movie.Info<-NA
 for(i in 1:length(movieID.URL)) {
   movie.Info[i]<-list(movieID.URL[i] %>% read_html(movieID.URL[i]) %>% html_nodes("#movieinfoDetail") %>% html_text())
 }
+
 movie.Info.melt<-melt(movie.Info)
 movie.head.info<-cbind(MovieURL.melt.id,movie.Info.melt)
 names(movie.head.info)[5]<-'info'
@@ -106,7 +106,7 @@ movie.sales_open.review$numberfostar<-as.numeric(as.character(movie.sales_open.r
 movie.sales_open.review$ID<-1
 movie.sales_open.review$ID<-cumsum(movie.sales_open.review$ID)
 
-# 개별 영화의 140자 리뷰 데이터를 수집. 리뷰 텍스트와 평점, 리뷰일자 데이터
+# 개별 영화의 150자 리뷰 데이터를 수집. 수집 데이터는 리뷰 텍스트와 평점, 리뷰일자 데이터를 포함
 movie.sales_open.review$pages<-with(movie.sales_open.review, ceiling(numberofstar/15))
 Movie.urls<-paste0("http://movie.daum.net/moviedetail/moviedetailNetizenPoint.do?movieId=",movie.sales_open.review$movieId,"&searchType=all&type=after&page=")
 
@@ -148,7 +148,7 @@ Movie.urls.df$date<-as.POSIXct(Movie.urls.df$date)
 Movie.urls.pages$url.no<-1
 Movie.urls.pages$url.no<-cumsum(Movie.urls.pages$url.no)
 
-# 기존에 합친 영화 매출, 영화 전체 리뷰데이터에 개별 영화의 리뷰데이터를 합침
+# 기존에 합친 영화 매출, 영화 전체 리뷰데이터(평균 평점, 평점 수)에 개별 영화의 리뷰데이터를 합침
 Movie.urls.df<-merge(Movie.urls.df, Movie.urls.pages, c('url.no'),all.x=T)
 
 Movie.urls.df$movieId<-gsub("[[:print:]]+(movieId=)", "", Movie.urls.df$value)
@@ -157,7 +157,7 @@ Movie.urls.df$movieId<-gsub("(&searchType)+[[:print:]]+$", "", Movie.urls.df$mov
 movie.sales_open.review.all<-merge(movie.sales_open.review, Movie.urls.df, c('movieId'),all.x=T)
 movie.sales_open.review.all<-subset(movie.sales_open.review.all, numberofstar>0)
 
-# 140자 영화평 text 데이터 클리닝 작업
+# 150자 영화평 텍스트 데이터 클리닝 작업
 movie.sales_open.review.all$text.clean<- gsub("\t", " ", movie.sales_open.review.all$text)
 movie.sales_open.review.all$text.clean<- gsub("\n", " ", movie.sales_open.review.all$text.clean)
 movie.sales_open.review.all$text.clean<- gsub("\r", " ", movie.sales_open.review.all$text.clean)
