@@ -84,7 +84,7 @@ daily_sales_ts.decomp<-melt(daily_sales_ts.decomp, id=c('time'))
 ggplot(data=daily_sales_ts.decomp, aes(x=time, y=value, colour=variable)) + geom_line()
 ggplot(data=subset(daily_sales_ts.decomp,time>=2000), aes(x=time, y=value, colour=variable)) + geom_line()
 
-# 개별 영화의 개봉일 이후 지난일자를 계산
+# 개별 영화의 개봉일 이후 지난 일자를 계산
 daily_df$value.openDt<-as.Date(as.character(daily_df$value.openDt))
 daily_df$day_dif<-with(daily_df, day-value.openDt)
 
