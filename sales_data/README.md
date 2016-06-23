@@ -76,6 +76,7 @@ url_json[i] <- fromJSON(file=url[i])
 
 [[1]]$dailyBoxOfficeList[[1]]$salesInten
 [1] "1740212000"
+...
 ```
 - 필요없는 정보를 제외하고, list형태로 데이터를 한번 정제해 주도록 하겠습니다.
 ```
@@ -87,7 +88,7 @@ for(i in 1:length(url_json)){
   daily_df[[i]]<-daily_df[[i]][complete.cases(daily_df[[i]][,3]),]
 }
 ```
-- 보다 깔끔하게 데이터를 확인할 수 있게 되었습니다.
+- 아래와 같이 보다 깔끔하게 데이터를 확인할 수 있게 되었습니다.
 ```
 [[1]]
     L3 value.NA value.rnum value.rank value.rankInten value.rankOldAndNew value.movieCd                              value.movieNm value.openDt value.salesAmt value.salesShare value.salesInten value.salesChange
