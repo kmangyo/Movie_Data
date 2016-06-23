@@ -6,7 +6,7 @@
 - API 덕분에 쉽게 데이터 수집이 가능하므로 2010-01-01 ~ 2016-05-31 약 6년이 넘는 기간동안의 일자별 데이터를 수집해 보겠습니다. 
   - 2,343건 요청이니 일 사용제한을 넘지는 않습니다.
 
-- 사용한 패키지는 데이터 전처리를 위한 패키지와(dplyr, tidyr, reshape2), json 데이터를 처리하기 위한 패키지 rjson을 사용하였습니다. 또한, 시각화를 위한 ggplot2도 사용하였습니다.
+- 사용한 패키지는 데이터 전처리를 위한 패키지와(plyr, dplyr, reshape2), json 데이터를 처리하기 위한 패키지 rjson을 사용하였습니다. 또한, 시각화를 위한 ggplot2도 사용하였습니다.
 ```
 library(rjson)
 library(reshape2)
@@ -15,7 +15,7 @@ library(dplyr)
 library(ggplot2)
 ```
 - 필요한 패키지가 준비되었으면, 데이터 수집을 위한 Request URL을 생성합니다.
-- Request url 구조는 기본 URL 사이에 API Key와 수집할 데이터의 일자를 입력합니다. 
+- Request URL 구조는 기본 URL 사이에 API Key를 넣고 마지막에 수집할 데이터의 일자를 입력합니다. 
   - json으로 데이터를 받아왔지만 XML로 받아 올 수도 있습니다.
   - 예시) 	http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=430156241533f1d058c603178cc3ca0e&targetDt=20120101
 ```
@@ -36,7 +36,7 @@ for(i in 1:length(url)){
 url_json[i] <- fromJSON(file=url[i])
   }
 ```
-- 아래와 같은 형식으로 데이터를 받아옵니다. 분석하기에 적합하지 않으므로, 몇가지 전처리가 필요합니다.
+- 아래와 같은 형식으로 데이터를 받아옵니다. 분석하기에 적합하지 않으므로, 몇 가지 전처리가 필요합니다.
 ```
 [[1]]
 [[1]]$boxofficeType
@@ -114,7 +114,7 @@ for(i in 1:length(url_json)){
 165      183151000          1726             139               10         25982             6            22
 ```
 - 하지만 여전히 list 형태이므로, 분석하기 편하게 data.frame으로 변환하는 작업을 진행하도록 하겠습니다.
-- plyr의 rbind.fill package를 사용하면, 리스트 형태를 하나의 data.frame으로 합칠 수 있습니다.
+- plyr의 rbind.fill 함수를 사용하면, 리스트 형태를 하나의 data.frame으로 합칠 수 있습니다.
 ```
 df <- rbind.fill(daily_df)
 daily_df<-df
