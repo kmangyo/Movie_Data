@@ -129,7 +129,7 @@ daily_df$L1<-rep(1:2343,each=10)
 daily_df<-merge(daily_df, df_day, c('L1'),all.x=T)
 ```
 - 이제 일자마다 상위 10개 영화의 매출액과 매출 비중 데이터를 합해서 일자별 데이터를 만들 수 있습니다.
-- 그리고 상위 10개의 해당 일자 매출 비중을 알 수 있으니, 당연히 상위 10개에 포함되지 않는 매출액도 계산할 수 있습니다.
+- 그리고 상위 10개의 해당 일자 매출 비중을 알 수 있으니, 상위 10개에 포함되지 않는 매출액도 계산할 수 있습니다.
 ```
 daily_sales<- daily_df %>% group_by(day) %>% summarise(sum.sales=sum(value.salesAmt),sum.share=sum(value.salesShare)
 daily_sales$total.sales<-with(daily_sales, sum.sales/sum.share*100)
