@@ -14,7 +14,6 @@ library(plyr)
 library(dplyr)
 library(ggplot2)
 ```
-
 - 필요한 패키지가 준비되었으면, 데이터 수집을 위한 Request URL을 생성합니다.
 - Request url 구조는 기본 URL 사이에 API Key와 수집할 데이터의 일자를 입력합니다. 
   - json으로 데이터를 받아왔지만 XML로 받아 올 수도 있습니다.
@@ -30,7 +29,6 @@ dates<-gsub("-","",dates)
 day<-dates
 url<-paste0('http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=',api_key,'&targetDt=',day)
 ```
-
 - rjson 패키지를 활용해 데이터를 받아옵니다.
 ```
 url_json<-list()
@@ -38,7 +36,6 @@ for(i in 1:length(url)){
 url_json[i] <- fromJSON(file=url[i])
   }
 ```
-
 - 아래와 같은 형식으로 데이터를 받아옵니다. 분석하기에 적합하지 않으므로, 몇가지 전처리가 필요합니다.
 ```
 [[1]]
@@ -79,32 +76,7 @@ url_json[i] <- fromJSON(file=url[i])
 
 [[1]]$dailyBoxOfficeList[[1]]$salesInten
 [1] "1740212000"
-
-[[1]]$dailyBoxOfficeList[[1]]$salesChange
-[1] "60"
-
-[[1]]$dailyBoxOfficeList[[1]]$salesAcc
-[1] "48073858500"
-
-[[1]]$dailyBoxOfficeList[[1]]$audiCnt
-[1] "542043"
-
-[[1]]$dailyBoxOfficeList[[1]]$audiInten
-[1] "216989"
-
-[[1]]$dailyBoxOfficeList[[1]]$audiChange
-[1] "70"
-
-[[1]]$dailyBoxOfficeList[[1]]$audiAcc
-[1] "5692710"
-
-[[1]]$dailyBoxOfficeList[[1]]$scrnCnt
-[1] "707"
-
-[[1]]$dailyBoxOfficeList[[1]]$showCnt
-[1] "3424"
 ```
-
 - 필요없는 정보를 제외하고, list형태로 데이터를 한번 정제해 주도록 하겠습니다.
 ```
 daily_df<-list()
@@ -115,7 +87,6 @@ for(i in 1:length(url_json)){
   daily_df[[i]]<-daily_df[[i]][complete.cases(daily_df[[i]][,3]),]
 }
 ```
-
 - 보다 깔끔하게 데이터를 확인할 수 있게 되었습니다.
 ```
 [[1]]
@@ -142,14 +113,12 @@ for(i in 1:length(url_json)){
 147    38901105500          1983            1316              200       5392184            18            39
 165      183151000          1726             139               10         25982             6            22
 ```
-
 - 하지만 여전히 list 형태이므로, 분석하기 편하게 data.frame으로 변환하는 작업을 진행하도록 하겠습니다.
 - plyr의 rbind.fill package를 사용하면, 리스트 형태를 하나의 data.frame으로 합칠 수 있습니다.
 ```
 df <- rbind.fill(daily_df)
 daily_df<-df
 ```
-
 - 각각 개별 변수에 대한 설명은 [영진위 오픈API 사이트] (http://www.kobis.or.kr/kobisopenapi/homepg/apiservice/searchServiceInfo.do)에서 확인할 수 있습니다.
 - data.frame으로 합쳐진 상태에서는 날짜정보가 포함되어 있지 않으니, 날짜정보를 생성하여 넣어주도록 합니다.
 ```
@@ -158,20 +127,18 @@ df_day<-data.frame(day=df_day,L1=c(1:2343))
 daily_df$L1<-rep(1:2343,each=10)
 daily_df<-merge(daily_df, df_day, c('L1'),all.x=T)
 ```
-
 - 이제 일자마다 상위 10개 영화의 매출액과 매출 비중 데이터를 합해서 일자별 데이터를 만들 수 있습니다.
 - 그리고 상위 10개의 해당 일자 매출 비중을 알 수 있으니, 당연히 상위 10개에 포함되지 않는 매출액도 계산할 수 있습니다.
 ```
 daily_sales<- daily_df %>% group_by(day) %>% summarise(sum.sales=sum(value.salesAmt),sum.share=sum(value.salesShare)
 daily_sales$total.sales<-with(daily_sales, sum.sales/sum.share*100)
 ```
-
-- 일자별 매출 추이를 그려보도록 하겠습니다.
+- 데이터 정제가 완료되었으니 일자별 매출 추이를 그려보도록 하겠습니다.
 ```
 daily_sales<-data.frame(daily_sales)
 ggplot(daily_sales, aes(x=day, y=total.sales)) + geom_line()
 ```
 ![사용자 입력](https://dl.dropboxusercontent.com/u/1049842/%EB%B8%94%EB%A1%9C%EA%B7%B8/%EC%98%81%ED%99%94_%EB%8B%A4%EC%9D%8C/total_sales_name.png)
 
-- 아마도 시즈널(주간, 월간 등)한 특성을 가진 완만한 트랜드의 매출추이를 확인할 수 있습니다.
-- 데이터 수집은 여기까지 입니다. 간단한 분석은 [저의 개인 블로그] (http://khg423.dothome.co.kr/index.php/2016/06/21/%EC%98%81%ED%99%94-%EB%A7%A4%EC%B6%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%82%B4%ED%8E%B4%EB%B3%B4%EA%B8%B0-%EC%98%81%ED%99%94-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%B6%84%EC%84%9D-part-2/)에 올려놓았으니 관심 있으신 분은 살펴보시면 되겠습니다.
+- 시즈널(주간, 월간 등)한 특성을 가진 완만한 트랜드의 매출추이를 확인할 수 있습니다.
+- 데이터 수집은 여기까지 입니다. 간단한 분석은 [저의 개인 블로그] (http://khg423.dothome.co.kr/index.php/2016/06/21/%EC%98%81%ED%99%94-%EB%A7%A4%EC%B6%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%82%B4%ED%8E%B4%EB%B3%B4%EA%B8%B0-%EC%98%81%ED%99%94-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%B6%84%EC%84%9D-part-2/)에 올려놓았으니 관심 있으신 분은 방문해 주세요.
