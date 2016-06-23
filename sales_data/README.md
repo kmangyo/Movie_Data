@@ -133,7 +133,17 @@ daily_df<-merge(daily_df, df_day, c('L1'),all.x=T)
 daily_sales<- daily_df %>% group_by(day) %>% summarise(sum.sales=sum(value.salesAmt),sum.share=sum(value.salesShare)
 daily_sales$total.sales<-with(daily_sales, sum.sales/sum.share*100)
 ```
-- 데이터 정제가 완료되었으니 일자별 매출 추이를 그려보도록 하겠습니다.
+- 데이터 정제가 완료되었습니다. 아래처럼 일자별 매출을 확인할 수 있습니다.
+```
+        day   sum.sales sum.share total.sales
+1 2010-01-01 10263973000      99.4 10325928571
+2 2010-01-02  9974429000      99.4 10034636821
+3 2010-01-03  7915739000      99.3  7971539778
+4 2010-01-04  2789491000      99.4  2806328974
+5 2010-01-05  2689125000      98.9  2719034378
+6 2010-01-06  2478304000      98.6  2513492901
+```
+- 마지막으로 일자별 매출 추이를 그려보도록 하겠습니다.
 ```
 daily_sales<-data.frame(daily_sales)
 ggplot(daily_sales, aes(x=day, y=total.sales)) + geom_line()
