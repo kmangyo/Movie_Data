@@ -147,9 +147,9 @@ daily_sales$total.sales<-with(daily_sales, sum.sales/sum.share*100)
 - 마지막으로 일자별 매출 추이를 그려보도록 하겠습니다.
 ```
 daily_sales<-data.frame(daily_sales)
-ggplot(daily_sales, aes(x=day, y=total.sales)) + geom_line()
+ggplot(daily_sales, aes(x=day, y=total.sales)) + geom_line() + xlab(c('날짜')) +ylab(c('매출'))
 ```
-![사용자 입력](https://dl.dropboxusercontent.com/u/1049842/%EB%B8%94%EB%A1%9C%EA%B7%B8/%EC%98%81%ED%99%94_%EB%8B%A4%EC%9D%8C/total_sales_name.png)
+![사용자 입력](https://dl.dropboxusercontent.com/u/1049842/%EB%B8%94%EB%A1%9C%EA%B7%B8/%EC%98%81%ED%99%94_%EB%8B%A4%EC%9D%8C/movie_sales_data.png)
 
 - 시즈널(주간, 월간 등)한 특성을 가진 완만한 트랜드의 매출추이를 확인할 수 있습니다.
 - 데이터 수집은 여기까지 입니다. 간단한 분석은 [저의 개인 블로그] (http://khg423.dothome.co.kr/index.php/2016/06/21/%EC%98%81%ED%99%94-%EB%A7%A4%EC%B6%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%82%B4%ED%8E%B4%EB%B3%B4%EA%B8%B0-%EC%98%81%ED%99%94-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%B6%84%EC%84%9D-part-2/)에 올려놓았으니 관심 있으신 분은 방문해 주세요.
