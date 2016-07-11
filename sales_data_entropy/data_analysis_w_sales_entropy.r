@@ -1,14 +1,16 @@
 
 # 주간 영화 매출 데이터 만들기
-daily_df_et$week<-strftime(daily_df_et$day,format="%Y-%W") 
-daily_df_et_wk<- daily_df_et %>% group_by(week, value.movieNm, value.movieCd) %>% summarise(sales=sum(value.salesAmt))
+daily_df$week<-strftime(daily_df$day,format="%Y-%W") 
+daily_df_et_wk<- daily_df %>% group_by(week, value.movieNm, value.movieCd) %>% summarise(sales=sum(value.salesAmt))
 daily_df_et_wk_sales<- daily_df_et %>% group_by(week) %>% summarise(sales=sum(value.salesAmt))
 daily_df_et_wk<-merge(daily_df_et_wk, daily_df_et_wk_sales, c('week'),all.x=T)
 names(daily_df_et_wk)[4:5]<-c('sales','week.sales')
 
 ggplot(daily_df_et_wk_sales, aes(x=as.factor(week), y=sales, group=1)) + geom_line()
 
-# 매출 균등성 (entropy)계산하기
+# 매출 균등성 (entropy) 계산하기
+# Godes & Mayzlin(2004) Online conversation WOM, Marketing Science
+# https://msbfile03.usc.edu/digitalmeasures/mayzlin/intellcont/godes_mayzlin04-1.pdf
 daily_df_et_wk$log<-with(daily_df_et_wk, log(sales/week.sales))
 daily_df_et_wk$dv<-with(daily_df_et_wk, sales/week.sales)
 daily_df_et_wk$multi<-with(daily_df_et_wk, log*dv)
