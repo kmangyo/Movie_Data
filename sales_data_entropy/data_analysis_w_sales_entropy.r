@@ -18,7 +18,7 @@ daily_df_et_wk_sum<-daily_df_et_wk %>% group_by(week) %>% summarise(et=-sum(mult
 
 ggplot(daily_df_et_wk_sum, aes(x=as.factor(week), y=et, group=1)) + geom_line()
 
-# 주간 매출데이터와 매출 균등성 데이터 merge
+# 주간 매출 데이터와 매출 균등성 데이터 merge
 daily_df_et_wk_sum<-merge(daily_df_et_wk_sum, daily_df_et_wk_sales, c('week'),all.x=T)
 ggplot(daily_df_et_wk_sum, aes(et, sales)) + geom_point()
 with(daily_df_et_wk_sum, cor(et,sales))
