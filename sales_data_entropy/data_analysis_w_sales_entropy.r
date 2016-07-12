@@ -1,3 +1,5 @@
+# 영진위 API를 활용한 일자별 영화 매출 데이터 수집 방법은 아래 글을 참고
+https://github.com/kmangyo/Movie_Data/blob/master/sales_data/README.md
 
 # 주간 영화 매출 데이터 만들기
 daily_df$week<-strftime(daily_df$day,format="%Y-%W") 
@@ -8,8 +10,8 @@ names(daily_df_et_wk)[4:5]<-c('sales','week.sales')
 
 ggplot(daily_df_et_wk_sales, aes(x=as.factor(week), y=sales, group=1)) + geom_line()
 
-# 매출 균등성 (entropy) 계산하기
-# Godes & Mayzlin(2004) Online conversation WOM, Marketing Science
+# 주간 영화 매출 균등성 (entropy) 계산하기
+# Godes & Mayzlin(2004), Online conversation WOM, Marketing Science
 # https://msbfile03.usc.edu/digitalmeasures/mayzlin/intellcont/godes_mayzlin04-1.pdf
 daily_df_et_wk$log<-with(daily_df_et_wk, log(sales/week.sales))
 daily_df_et_wk$dv<-with(daily_df_et_wk, sales/week.sales)
@@ -21,7 +23,7 @@ ggplot(daily_df_et_wk_sum, aes(x=as.factor(week), y=et, group=1)) + geom_line()
 # 주간 매출 데이터와 매출 균등성 데이터 merge
 daily_df_et_wk_sum<-merge(daily_df_et_wk_sum, daily_df_et_wk_sales, c('week'),all.x=T)
 ggplot(daily_df_et_wk_sum, aes(et, sales)) + geom_point()
-with(daily_df_et_wk_sum, cor(et,sales))
+with(daily_df_et_wk_sum, cor(et, sales))
 
 # 주간 영화 매출 순위 및 비중
 daily_df_et_wk$seq<-1
@@ -46,7 +48,7 @@ daily_df_et_wk_sum$autumn<-with(daily_df_et_wk_sum, ifelse(mon=='09'|mon=='10'|m
 daily_df_et_wk_sum$winter<-with(daily_df_et_wk_sum, ifelse(mon=='12'|mon=='01'|mon=='02',1,0))
 
 # 베이지안 회귀분석
-#http://mcmcpack.berkeley.edu/
+# http://mcmcpack.berkeley.edu/
 library(MCMCpack)
 model1 <- MCMCregress(sales ~ et, daily_df_et_wk_sum)
 model2 <- MCMCregress(sales ~ summer+autumn+winter, daily_df_et_wk_sum)
@@ -56,7 +58,7 @@ summary(model2);plot(model2)
 summary(model3);plot(model3)
 
 # 모형 비교
-#http://bayesfactorpcl.r-forge.r-project.org/
+# http://bayesfactorpcl.r-forge.r-project.org/
 library(BayesFactor)
 BF<-regressionBF(sales ~ et+summer+autumn+winter, data = daily_df_et_wk_sum)
 head(BF, n=3)
