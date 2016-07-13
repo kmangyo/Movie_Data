@@ -13,7 +13,7 @@
 ![1위 영화와 총매출](https://dl.dropboxusercontent.com/u/1049842/%EB%B8%94%EB%A1%9C%EA%B7%B8/%EC%98%81%ED%99%94_%EB%8B%A4%EC%9D%8C/1st_movie.png)
 
   - 반대로 10위 영화의 매출 비중과 해당 주차의 전체 매출간의 상관관계를 그려보면, 위와는 반대로 점차 감소하는 추세를 확인할 수 있다. 
-    - cor은 -0.37 가량.
+    - cor은 -0.37.
 ![10위 영화와 총매출](https://dl.dropboxusercontent.com/u/1049842/%EB%B8%94%EB%A1%9C%EA%B7%B8/%EC%98%81%ED%99%94_%EB%8B%A4%EC%9D%8C/10th_movie.png)
 
 - 이러한 성향을 보다 보편적으로 측정하기 위해 영화 매출의 균등성을 측정해 보았다. 
