@@ -22,6 +22,12 @@
 - 이러한 성향을 보다 보편적으로 측정하기 위해 영화 매출의 균등성을 측정해 보았다. 
 - 측정 방법은 [Godes & Mayzlin(2004)](https://msbfile03.usc.edu/digitalmeasures/mayzlin/intellcont/godes_mayzlin04-1.pdf)의 논문에서 제시된 엔트로피 계산을 적용해 보고자 한다. 
   - 아래 예시는 1위 영화가 전체 주간 매출의 18.5%, 2위 영화는 13.3%, 3위 영화는 13.0% 정도로 비교적 균등하게 매출이 발생했던 주간의 매출 이다. 계산된 매출 균등성은 2.335215.
+
+| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
+
 |rank|week|movie_name|sales|
 | --- | --- | --- | --- |
 |1 | 2012-25|               후궁 : 제왕의 첩| 3387609500|
