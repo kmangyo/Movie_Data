@@ -23,11 +23,6 @@
 - 측정 방법은 [Godes & Mayzlin(2004)](https://msbfile03.usc.edu/digitalmeasures/mayzlin/intellcont/godes_mayzlin04-1.pdf)의 논문에서 제시된 엔트로피 계산을 적용해 보고자 한다. 
   - 아래 예시는 1위 영화가 전체 주간 매출의 18.5%, 2위 영화는 13.3%, 3위 영화는 13.0% 정도로 비교적 균등하게 매출이 발생했던 주간의 매출 이다. 계산된 매출 균등성은 2.335215.
 
-| First Header  | Second Header |
-| ------------- | ------------- |
-| Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  |
-
 |rank|week|movie_name|sales|
 | --- | --- | --- | --- |
 |1 | 2012-25|               후궁 : 제왕의 첩| 3387609500|
@@ -55,6 +50,7 @@ weekly_entropy<- -sum(unlist(list))
 ```
 
   - 또 다른 예시는, 1위 영화가 무려 주간 매출의 74%가 넘는 경우이다. 아래의 경우, 매출 균등성은 1.047454
+
 |rank|week|movie_name|sales|
 | --- | --- | --- | --- |
 |1  |2015-17 |                    어벤져스: 에이지 오브 울트론 |29899387100|
