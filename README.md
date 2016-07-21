@@ -15,4 +15,4 @@
 
 3) 영화 매출 데이터 분석 내용 추가
 
-- 블록버스터 영화가 시장 파이를 키우는가?
+- 블록버스터 영화가 시장 파이를 키우는가?: https://github.com/kmangyo/Movie_Data/blob/master/sales_data_entropy/README.md
