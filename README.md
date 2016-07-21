@@ -12,3 +12,7 @@
 2) 영진위 오픈 API를 활용해 일자별 매출 데이터 추가 (2010-01-01 ~ 2016-05-31)
 
 - 영진위 오픈 API: http://www.kobis.or.kr/kobisopenapi/homepg/main/main.do
+
+3) 영화 매출 데이터 분석 내용 추가
+
+- 블록버스터 영화가 시장 파이를 키우는가?
