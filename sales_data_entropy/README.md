@@ -41,12 +41,19 @@
 |14| 2012-25|더 씽|97286500|
 
 ```
-week.sales<-with(df,sum(sales))
-list<-list()
-for(i in 1:nrow(df)) {
-  list[i]<-(df[i,3]/week.sales)*log(df[i,3]/week.sales)
-}
-weekly_entropy<- -sum(unlist(list))
+E(t) = - sum((sales_i/sales_sum)*log(sales_i/sales_sum))
+
+where,
+
+E(t) = t주의 매출균등성 (entropy)
+
+sales_sum = t주의 전체 주간 매출
+
+sales_i = t주의 i번째 영화의 매출
+
+i = 1 ~ N
+
+N = 해당 주간 매출이 기록된 영화의 수
 ```
 
   - 또 다른 예시는, 1위 영화가 무려 주간 매출의 74%가 넘는 경우이다. 아래의 경우, 매출 균등성은 1.047454
