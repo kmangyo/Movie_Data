@@ -1,4 +1,3 @@
-library(reshape2)
 library(ggplot2)
 library(MASS)
 
@@ -35,6 +34,7 @@ likedislike_split<-split(likedislike, likedislike$name)
 
 beta<-list()
 
+#전체 평점분포의 shape1, shape2 값을 초기값으로 사용 (shape1=1.63, shape2=0.85)
 for(i in 1:length(likedislike_split)) {
   star<-likedislike_split[i]
   star<-data.frame(star)
