@@ -23,6 +23,7 @@ for(i in 1:nrow(movie.name.image.spec_500)) {
     body = mybody,
     encode = 'json')
   con[[i]] <- content(visionResponse)
+  # Due to the limit of request at once, there is the sleep time.
   if(!is.null(con[[i]]$error$code)){
     Sys.sleep(60)
     image[i]<-movie.name.image.spec_500[i,6]
