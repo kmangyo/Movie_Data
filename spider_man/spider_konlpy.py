@@ -1,4 +1,3 @@
-
 import pandas as pd
 from konlpy.tag import Twitter
 twitter = Twitter()
