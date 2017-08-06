@@ -4,6 +4,7 @@ library(reshape2)
 library(dplyr)
 library(rvest)
 library(httr)
+library(stringr)
 library(KoNLP)
 useNIADic()
 library(ggplot2)
@@ -85,4 +86,45 @@ tail(text.noun_df_count, 20)
 ggplot(head(text.noun_df_count, 20), aes(x=reorder(value, log_ratio), y=log_ratio)) + geom_bar(stat = "identity") + coord_flip()
 ggplot(tail(text.noun_df_count, 20), aes(x=reorder(value, -log_ratio), y=log_ratio)) + geom_bar(stat = "identity") + coord_flip()
 
+
+# using python
+
+text.noun_p_12_df <-read.csv(file.choose(), encoding = 'UTF-8')
+head(text.noun_p_12_df)
+text.noun_p_17_df <-read.csv(file.choose(), encoding = 'UTF-8')
+head(text.noun_p_17_df)
+
+text.noun_p_12_df$group<-'amazing'
+text.noun_p_17_df$group<-'home'
+
+names(text.noun_p_12_df)<-c('no1','no2','tag','group')
+names(text.noun_p_17_df)<-c('no1','no2','tag','group')
+
+text.noun_p_df<-rbind(text.noun_p_12_df,text.noun_p_17_df)
+
+text.noun_p_df$cnt<-str_count(text.noun_p_df$tag, "Noun")
+text.noun_p_df<-subset(text.noun_p_df, cnt>0)
+
+text.noun_p_df$tag_noun<-gsub("'|,|\\(|\\)|Noun| ", "", text.noun_p_df$tag)
+text.noun_p_df$tag_noun_n<-nchar(text.noun_p_df$tag_noun)
+head(text.noun_p_df)
+
+text.noun_p_df_hist<- text.noun_p_df %>% count(group, tag_noun)
+text.noun_p_df_hist<- text.noun_p_df_hist %>% arrange(-n)
+
+text.noun_p_df_count <- text.noun_p_df %>% filter(tag_noun_n>1) %>%
+  count(group, tag_noun) %>% filter(n>100) %>% 
+  spread(group, n, fill = 0) %>%
+  mutate(total = amazing + home,
+         amazing = (amazing + 1) / sum(amazing + 1),
+         home = (home + 1) / sum(home + 1),
+         log_ratio = log2(home / amazing),
+         abs_ratio = abs(log_ratio)) %>%
+  arrange(desc(log_ratio))
+
+head(text.noun_p_df_count, 20)
+tail(text.noun_p_df_count, 20)
+
+ggplot(head(text.noun_p_df_count, 20), aes(x=reorder(tag_noun, log_ratio), y=log_ratio)) + geom_bar(stat = "identity") + coord_flip()
+ggplot(tail(text.noun_p_df_count, 20), aes(x=reorder(tag_noun, -log_ratio), y=log_ratio)) + geom_bar(stat = "identity") + coord_flip()
 
