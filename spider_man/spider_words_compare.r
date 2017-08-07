@@ -70,9 +70,10 @@ text.noun_df<-rbind(text.noun_12_df,text.noun_17_df)
 
 text.noun_df_hist<- text.noun_df %>% count(group, value)
 text.noun_df_hist<- text.noun_df_hist %>% arrange(-n)
+text.noun_df$nchar <- nchar(as.character(text.noun_df$value))
 
 # compare nouns
-text.noun_df_count <- text.noun_df %>%
+text.noun_df_count <- text.noun_df %>% filter(nchar>1) %>%
   count(group, value) %>% filter(n>100) %>% 
   spread(group, n, fill = 0) %>%
   mutate(total = amazing + home,
@@ -87,6 +88,9 @@ tail(text.noun_df_count, 20)
 
 ggplot(head(text.noun_df_count, 20), aes(x=reorder(value, log_ratio), y=log_ratio)) + geom_bar(stat = "identity") + coord_flip()
 ggplot(tail(text.noun_df_count, 20), aes(x=reorder(value, -log_ratio), y=log_ratio)) + geom_bar(stat = "identity") + coord_flip()
+
+text.noun_df_count$group<-ifelse(text.noun_df_count$log_ratio>0,c('Homecoming'),c('Amazing'))
+ggplot(rbind(head(text.noun_df_count, 20),tail(text.noun_df_count, 20)), aes(x=reorder(value, log_ratio), y=log_ratio)) + geom_bar(aes(fill = group), stat = "identity") + coord_flip() + xlab('Words')
 
 # using python data
 text.noun_p_12_df <-read.csv(file.choose(), encoding = 'UTF-8')
@@ -128,3 +132,6 @@ tail(text.noun_p_df_count, 20)
 
 ggplot(head(text.noun_p_df_count, 20), aes(x=reorder(tag_noun, log_ratio), y=log_ratio)) + geom_bar(stat = "identity") + coord_flip()
 ggplot(tail(text.noun_p_df_count, 20), aes(x=reorder(tag_noun, -log_ratio), y=log_ratio)) + geom_bar(stat = "identity") + coord_flip()
+
+text.noun_p_df_count$group<-ifelse(text.noun_p_df_count$log_ratio>0,c('Homecoming'),c('Amazing'))
+ggplot(rbind(head(text.noun_p_df_count, 20),tail(text.noun_p_df_count, 20)), aes(x=reorder(tag_noun, log_ratio), y=log_ratio)) + geom_bar(aes(fill = group), stat = "identity") + coord_flip() + xlab('Words')
